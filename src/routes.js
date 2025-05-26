@@ -19,6 +19,15 @@ import AllParentProductCategories from "views/admin/ParentProductCategories/AllP
 //product categories
 import AllProductCategories from "views/admin/ProductCategories/AllProductCategories";
 
+//units
+import AllUnits from "views/admin/Units/AllUnits";
+
+//suppliers
+import AllSuppliers from "views/admin/Suppliers/AllSuppliers";
+
+//clients
+import AllClients from "views/admin/Clients/AllClients";
+
 // Auth Imports
 import SignIn from "views/auth/SignIn";
 
@@ -56,6 +65,14 @@ const routes = [
     secondary: true,
   },
   {
+    name: "Units",
+    layout: "/admin",
+    path: "units",
+    icon: <MdOutlineShoppingCart className="h-6 w-6" />,
+    component: <AllUnits />,
+    secondary: true,
+  },
+  {
     name: "Parent Categories", //Main Categories
     layout: "/admin",
     path: "parent-product-categories",
@@ -63,13 +80,28 @@ const routes = [
     component: <AllParentProductCategories />,
     secondary: true,
   },
-
   {
     name: "Categories",
     layout: "/admin",
     path: "product-categories-list",
     icon: <MdOutlineShoppingCart className="h-6 w-6" />,
     component: <AllProductCategories />,
+    secondary: true,
+  },
+  {
+    name: "Suppliers",
+    layout: "/admin",
+    path: "suppliers",
+    icon: <MdOutlineShoppingCart className="h-6 w-6" />,
+    component: <AllSuppliers />,
+    secondary: true,
+  },
+  {
+    name: "Clients",
+    layout: "/admin",
+    path: "clients",
+    icon: <MdOutlineShoppingCart className="h-6 w-6" />,
+    component: <AllClients />,
     secondary: true,
   },
   {
