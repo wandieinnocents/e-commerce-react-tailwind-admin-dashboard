@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import BranchesMenu from './BranchesMenu';
 
 const AllBranches = () => {
     const columns = [
@@ -37,43 +38,49 @@ const AllBranches = () => {
     });
 
     return (
-        <div className="p-4">
-            <h2 className="text-2xl font-bold mb-4">User Table</h2>
-            <div className="overflow-x-auto border rounded-lg shadow">
-                <table className="min-w-full table-auto text-sm text-left text-gray-700">
-                    <thead className="bg-gray-100">
-                        <tr>
-                            {columns.map((col) => (
-                                <th
-                                    key={col.key}
-                                    className="px-4 py-2 font-semibold cursor-pointer"
-                                    onClick={() => handleSort(col.key)}
-                                >
-                                    {col.label}
-                                    {sortColumn === col.key && (
-                                        <span className="ml-1">
-                                            {sortOrder === 'asc' ? '↑' : '↓'}
-                                        </span>
-                                    )}
-                                </th>
-                            ))}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {sortedData.map((row) => (
-                            <tr key={row.id} className="border-t hover:bg-gray-50">
+        <>
+
+            {/* branches menu */}
+            <BranchesMenu title="View Branches" />
+
+            <div className="container mx-auto pt-6">
+                <div className="overflow-x-auto border rounded-lg shadow">
+                    <table className="min-w-full table-auto text-sm text-left text-gray-700">
+                        <thead className="bg-gray-100">
+                            <tr>
                                 {columns.map((col) => (
-                                    <td key={col.key} className="px-4 py-2">
-                                        {row[col.key]}
-                                    </td>
+                                    <th
+                                        key={col.key}
+                                        className="px-4 py-2 font-semibold cursor-pointer"
+                                        onClick={() => handleSort(col.key)}
+                                    >
+                                        {col.label}
+                                        {sortColumn === col.key && (
+                                            <span className="ml-1">
+                                                {sortOrder === 'asc' ? '↑' : '↓'}
+                                            </span>
+                                        )}
+                                    </th>
                                 ))}
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            {sortedData.map((row) => (
+                                <tr key={row.id} className="border-t hover:bg-gray-50">
+                                    {columns.map((col) => (
+                                        <td key={col.key} className="px-4 py-2">
+                                            {row[col.key]}
+                                        </td>
+                                    ))}
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
             </div>
-        </div>
+        </>
     );
+
 };
 
 export default AllBranches;

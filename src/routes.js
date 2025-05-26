@@ -8,6 +8,10 @@ import DataTables from "views/admin/tables";
 
 //branches
 import AllBranches from "views/admin/Branches/AllBranches";
+import AddBranch from "views/admin/Branches/AddBranch";
+import ActiveBranches from "views/admin/Branches/ActiveBranches";
+import InActiveBranches from "views/admin/Branches/InActiveBranches";
+
 
 //brands
 import AllBrands from "views/admin/Brands/AllBrands";
@@ -47,6 +51,9 @@ const routes = [
     icon: <MdHome className="h-6 w-6" />,
     component: <MainDashboard />,
   },
+
+  //branches
+
   {
     name: "Branches",
     layout: "/admin",
@@ -55,6 +62,37 @@ const routes = [
     component: <AllBranches />,
     secondary: true,
   },
+
+  {
+    name: "Add Branch",
+    layout: "/admin",
+    path: "branches/add",
+    icon: <MdOutlineShoppingCart className="h-6 w-6" />,
+    component: <AddBranch />,
+    secondary: true,
+    hidden: true
+  },
+
+  {
+    name: "Active Branch",
+    layout: "/admin",
+    path: "branches/active",
+    icon: <MdOutlineShoppingCart className="h-6 w-6" />,
+    component: <ActiveBranches />,
+    secondary: true,
+    hidden: true
+  },
+
+  {
+    name: "In Active Branch",
+    layout: "/admin",
+    path: "branches/in-active",
+    icon: <MdOutlineShoppingCart className="h-6 w-6" />,
+    component: <InActiveBranches />,
+    secondary: true,
+    hidden: true
+  },
+
   {
     name: "Brands",
     layout: "/admin",
