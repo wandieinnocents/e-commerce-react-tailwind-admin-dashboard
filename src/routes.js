@@ -33,6 +33,7 @@ import AllClients from "views/admin/Clients/AllClients";
 
 // Auth Imports
 import SignIn from "views/auth/SignIn";
+import SignUp from "views/auth/Signup";
 
 // Icon Imports
 import {
@@ -170,6 +171,15 @@ const routes = [
     path: "sign-in",
     icon: <MdLock className="h-6 w-6" />,
     component: <SignIn />,
+    hidden: true
+  },
+  {
+    name: "Sign Up",
+    layout: "/auth",
+    path: "sign-up",
+    icon: <MdLock className="h-6 w-6" />,
+    component: <SignUp />,
+    hidden: true
   }
 ];
 export default routes;
