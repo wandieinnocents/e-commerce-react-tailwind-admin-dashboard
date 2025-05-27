@@ -2,8 +2,10 @@ import InputField from "components/fields/InputField";
 import React, { useState } from "react"; // Import useState
 import axios from "axios";
 import { toast } from 'react-toastify';
+import { useNavigate } from "react-router-dom";
 
 export default function Signup() {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     username: "",
     email: "",
@@ -26,7 +28,7 @@ export default function Signup() {
       // alert("Signup successful!");
       toast.success("Signup successful!");
       // Handle successful signup (e.g., redirect to login, show success message)
-
+      navigate("/auth/sign-in");
 
     } catch (error) {
       console.error("Signup error:", error.response?.data || error.message);
@@ -78,7 +80,7 @@ export default function Signup() {
           <input
             type="password"
             id="password"
-            placeholder="wandie@gmail.com"
+            placeholder="********"
             value={formData.password}
             onChange={handleChange}
             className="mb-3 border rounded px-3 py-2 w-full"
