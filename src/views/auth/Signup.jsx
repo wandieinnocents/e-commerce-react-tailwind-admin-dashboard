@@ -15,9 +15,7 @@ export default function Signup() {
   };
 
   const handleSubmit = async (e) => {
-    console.log("signu");
-
-    e.preventDefault(); // Prevent default form submission
+    e.preventDefault();
 
     try {
       const response = await axios.post(
@@ -33,7 +31,6 @@ export default function Signup() {
     } catch (error) {
       console.error("Signup error:", error.response?.data || error.message);
       const errorMessage = error.response?.data?.message || error.response?.data?.error || "Signup failed. Please try again.";
-      // alert("Signup failed: " + errorMessage);
       toast.error(errorMessage, {
         position: "top-right",
         autoClose: 3000,
@@ -47,14 +44,13 @@ export default function Signup() {
 
   return (
     <div className="flex h-full w-full min-h-screen items-center justify-center  md:mx-0 md:px-0 lg:mb-10 lg:items-center lg:justify-center">
-      {/* Sign in section */}
       <div className="mt-[10vh] w-full max-w-full flex-col items-center lg:pl-0 xl:max-w-[420px] ">
         <div className="bg-white shadow-md rounded-lg p-6 w-full">
           <h4 className="mb-2.5 text-4xl font-bold text-navy-700 dark:text-white text-center">
             Sign Up
           </h4>
           <p className="mb-9 ml-1 text-base text-gray-600 text-center">
-            Enter your email and password to sign up!
+            Create your account to get started!
           </p>
 
 
