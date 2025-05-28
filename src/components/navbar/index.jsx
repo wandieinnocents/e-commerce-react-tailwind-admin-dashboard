@@ -12,7 +12,11 @@ import {
 } from "react-icons/io";
 import avatar from "assets/img/avatars/avatar4.png";
 
+//context api
+import { useAuth } from '../../context/AuthContext';
+
 const Navbar = (props) => {
+  const { user, logout, token, isAuthenticated } = useAuth();
   const { onOpenSidenav, brandText } = props;
   const [darkmode, setDarkmode] = React.useState(false);
 
@@ -24,6 +28,9 @@ const Navbar = (props) => {
             className="text-sm font-normal text-navy-700 hover:underline dark:text-white dark:hover:text-white"
             href=" "
           >
+            <button onClick={logout} className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
+              Logout
+            </button>
             {/* Pages */}
             {/* <span className="mx-1 text-sm text-navy-700 hover:text-navy-700 dark:text-white">
               {" "}

@@ -4,8 +4,14 @@ import axios from "axios";
 import { FaEye, FaEdit, FaTrash } from 'react-icons/fa';
 import { FaSpinner } from 'react-icons/fa';
 
+//context api
+import { useAuth } from 'context/AuthContext';
 
 const AllBranches = () => {
+
+    const { user, logout, token, isAuthenticated } = useAuth();
+    console.log("user details", user);
+    console.log("user token", token);
 
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -57,6 +63,10 @@ const AllBranches = () => {
         <>
 
             {/* branches menu */}
+            {user && (
+                <p className="text-sm text-gray-600 mb-4">Logged in as: {user.username}</p>
+            )}
+
             <BranchesMenu title="View Branches" />
 
             <div className="overflow-x-auto py-4">
