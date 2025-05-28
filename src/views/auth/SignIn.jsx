@@ -24,16 +24,7 @@ export default function Signin() {
 
     } catch (err) {
       setError(err.message);
-      console.error("Signin error:", error.response?.data || error.message);
-      const errorMessage = error.response?.data?.message || error.response?.data?.error || "Signin failed. Please try again.";
-      toast.error(errorMessage, {
-        position: "top-right",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-      });
+      
     }
   };
 

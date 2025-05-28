@@ -3,6 +3,8 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
+import { toast } from 'react-toastify';
+
 
 
 const AuthContext = createContext();
@@ -52,11 +54,16 @@ export const AuthProvider = ({ children }) => {
             setToken(token);
             setUser(user);
         } catch (error) {
-            const errorMessagex = error.response?.data?.message || error.response?.data?.error || "Signin failed. Please try again.";
-
-            console.log("view error here x",errorMessagex);
-            const errorMsg = error.response?.data?.message || 'Login failed';
-            throw new Error(errorMsg);
+            const errorMessage = error.response?.data?.message || error.response?.data?.error || "Signin failed. Please try again.";
+            toast.error(errorMessage, {
+                position: "top-right",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+            });
+            throw new Error(errorMessage);
         }
     };
 

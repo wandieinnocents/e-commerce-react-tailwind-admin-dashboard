@@ -31,6 +31,10 @@ const Navbar = (props) => {
             <button onClick={logout} className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
               Logout
             </button>
+            {user && (
+              <p className="text-sm text-gray-600 mb-4">Logged in as: {user.username}</p>
+            )}
+
             {/* Pages */}
             {/* <span className="mx-1 text-sm text-navy-700 hover:text-navy-700 dark:text-white">
               {" "}

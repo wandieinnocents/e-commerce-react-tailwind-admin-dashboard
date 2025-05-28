@@ -63,9 +63,7 @@ const AllBranches = () => {
         <>
 
             {/* branches menu */}
-            {user && (
-                <p className="text-sm text-gray-600 mb-4">Logged in as: {user.username}</p>
-            )}
+          
 
             <BranchesMenu title="View Branches" />
 
