@@ -19,24 +19,17 @@ export default function Signin() {
     setError('');
     try {
       await login(email, password);
-      toast.success("Signin  successful!");
+      //redirect to dashboard
       navigate("/admin/default");
 
     } catch (err) {
       setError(err.message);
-      
     }
   };
 
-  // if (isAuthenticated) {
-  //   navigate("/admin/default");
-  //   // return null;
-  // }
 
   return (
     <form onSubmit={handleSubmit}>
-      {/* <input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" />
-      <input value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" type="password" /> */}
 
       <div className="flex h-full w-full min-h-screen items-center justify-center  md:mx-0 md:px-0 lg:mb-10 lg:items-center lg:justify-center">
         <div className="mt-[10vh] w-full max-w-full flex-col items-center lg:pl-0 xl:max-w-[420px] ">
@@ -71,7 +64,7 @@ export default function Signin() {
             />
 
             <button
-              onClick={handleSubmit} // Call handleSubmit on button click
+              onClick={handleSubmit}
               className="linear mt-2 w-full rounded-xl bg-brand-500 py-[12px] text-base font-medium text-white transition duration-200 hover:bg-brand-600 active:bg-brand-700 dark:bg-brand-400 dark:text-white dark:hover:bg-brand-300 dark:active:bg-brand-200"
             >
               Sign In

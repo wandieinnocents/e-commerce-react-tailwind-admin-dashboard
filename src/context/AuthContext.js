@@ -48,11 +48,10 @@ export const AuthProvider = ({ children }) => {
 
             localStorage.setItem('token', token);
             localStorage.setItem('user', JSON.stringify(user));
-
             axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-
             setToken(token);
             setUser(user);
+            toast.success("Signin  successful!");
         } catch (error) {
             const errorMessage = error.response?.data?.message || error.response?.data?.error || "Signin failed. Please try again.";
             toast.error(errorMessage, {
@@ -73,6 +72,7 @@ export const AuthProvider = ({ children }) => {
         delete axios.defaults.headers.common['Authorization'];
         setToken('');
         setUser(null);
+        toast.success("Logged out successful!");
         navigate("/auth/sign-in");
     };
 
