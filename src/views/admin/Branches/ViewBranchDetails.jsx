@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from '../../../context/AuthContext';
 import { useParams } from "react-router-dom";
 import { FaSpinner } from 'react-icons/fa';
+import { formatDate } from 'utils/DateFormarter';
 
 
 const ViewBranchDetails = () => {
@@ -49,9 +50,6 @@ const ViewBranchDetails = () => {
         fetchBranch();
     }, [token, id]);
 
-    // if (loading) {
-    //     return <div className="text-center mt-20">Loading branch details...</div>;
-    // }
 
     if (loading) {
         return (
@@ -76,8 +74,15 @@ const ViewBranchDetails = () => {
             <BranchesMenu title="Branch Details" />
 
             <div className="flex items-center justify-center py-20 bg-gray-50 px-4">
-                <div className="max-w-md w-full bg-white rounded-xl shadow-md p-8 space-y-6">
+                <div className="max-w-md w-full bg-white rounded-xl shadow-md p-8 space-y-3">
                     <h2 className="text-2xl font-bold text-center text-gray-800">Branch Details</h2>
+
+                    <div>
+                        <p className="text-sm text-gray-500">Code</p>
+                        <p className="text-lg font-medium text-gray-800">{branch.branch_code || "N/A"}</p>
+                    </div>
+
+                    <hr className="border-gray-200 " />
 
                     <div>
                         <p className="text-sm text-gray-500">Name</p>
@@ -88,20 +93,22 @@ const ViewBranchDetails = () => {
 
                     <div>
                         <p className="text-sm text-gray-500">Status</p>
-                        <p
-                            className={`text-lg font-medium ${branch.branch_status === "1"
-                                ? "text-green-600"
-                                : branch.branch_status === "2"
-                                    ? "text-red-600"
-                                    : "text-gray-600"
-                                }`}
-                        >
-                            {branch.branch_status === "1"
-                                ? "Active"
-                                : branch.branch_status === "2"
-                                    ? "Inactive"
-                                    : "Not Set"}
-                        </p>
+                        <div>
+
+                            {
+                                branch.branch_status == "1" ? (
+                                    <span className="inline-block bg-green-100 text-green-800 text-sm font-medium px-3 py-1 rounded-full">
+                                        Active
+                                    </span>
+                                ) : (
+                                    <span className="inline-block bg-red-400 text-white text-sm font-medium px-3 py-1 rounded-full">
+                                        Inactive
+                                    </span>
+                                )
+                            }
+
+                        </div>
+
                     </div>
 
                     <hr className="border-gray-200" />
@@ -110,6 +117,16 @@ const ViewBranchDetails = () => {
                         <p className="text-sm text-gray-500">Address</p>
                         <p className="text-lg font-medium text-gray-800">{branch.branch_address || "N/A"}</p>
                     </div>
+
+                    <hr className="border-gray-200" />
+
+                    <div>
+                        <p className="text-sm text-gray-500">Created On</p>
+                        <p className="text-lg font-medium text-gray-800">
+                            {formatDate(branch.createdAt, true)}
+                        </p>
+                    </div>
+
                 </div>
             </div>
 

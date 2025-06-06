@@ -30,14 +30,14 @@ const Navbar = (props) => {
           >
 
             {/* if user is logged in / authenticated  */}
-            {user && (
+            {/* {user && (
               <div>
                 <button onClick={logout} className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
                   Logout
                 </button>
                 <p className="text-sm text-gray-600 mb-4">Logged in as: {user.username}</p>
               </div>
-            )}
+            )} */}
 
             {/* Pages */}
             {/* <span className="mx-1 text-sm text-navy-700 hover:text-navy-700 dark:text-white">
@@ -223,12 +223,25 @@ const Navbar = (props) => {
                 >
                   Newsletter Settings
                 </a>
-                <a
-                  href=" "
-                  className="mt-3 text-sm font-medium text-red-500 hover:text-red-500 transition duration-150 ease-out hover:ease-in"
-                >
-                  Log Out
-                </a>
+
+                {
+                  token ? (
+                    <a
+                      onClick={logout}
+                      className="mt-3 text-sm font-medium text-red-500 hover:text-red-500 transition duration-150 ease-out hover:ease-in cursor-pointer"
+                    >
+                      Log Out
+                    </a>
+                  ) : (
+                    <a
+                      href="/auth/sign-in"
+                      className="mt-3 text-sm font-medium text-red-500 hover:text-red-500 transition duration-150 ease-out hover:ease-in cursor-pointer"
+                    >
+                      Log In
+                    </a>
+                  )
+                }
+
               </div>
             </div>
           }

@@ -4,6 +4,7 @@ import axios from "axios";
 import { FaEye, FaEdit, FaTrash } from 'react-icons/fa';
 import { FaSpinner } from 'react-icons/fa';
 import { useNavigate } from "react-router-dom";
+import { formatDate } from 'utils/DateFormarter';
 
 
 //context api
@@ -112,7 +113,7 @@ const AllBranches = () => {
                                         {branch.branch_name}
                                     </td>
                                     <td className="py-3 px-5 border-b text-gray-800">{branch.branch_address}</td>
-                                    <td className="py-3 px-5 border-b text-gray-800">{branch.createdAt}</td>
+                                    <td className="py-3 px-5 border-b text-gray-800">{formatDate(branch.createdAt , true)}</td>
 
                                     {/* actions  */}
                                     <td className="py-3 px-5 border-b text-center">
