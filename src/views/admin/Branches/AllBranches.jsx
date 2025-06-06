@@ -3,45 +3,64 @@ import BranchesMenu from './BranchesMenu';
 import axios from "axios";
 import { FaEye, FaEdit, FaTrash } from 'react-icons/fa';
 import { FaSpinner } from 'react-icons/fa';
+import { useNavigate } from "react-router-dom";
+
 
 //context api
 import { useAuth } from 'context/AuthContext';
 
 const AllBranches = () => {
 
-    const { user, logout, token, isAuthenticated } = useAuth();
-    console.log("user details", user);
-    console.log("user token", token);
+    const navigate = useNavigate();
 
-    const [users, setUsers] = useState([]);
+    const { user, logout, token, isAuthenticated } = useAuth();
+
+    const [branches, setBranches] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    // Fetch data using Axios
+
     useEffect(() => {
-        axios
-            .get("https://jsonplaceholder.typicode.com/users")
-            .then((response) => {
-                setUsers(response.data);
+        const fetchBranches = async () => {
+            try {
+                if (!token) {
+                    return;
+                    logout();
+                    console.log("cannot fetch branches because token is null");
+                }
+
+                const response = await axios.get("http://localhost:4001/api/branches", {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        Accept: "application/json",
+                    },
+                });
+
+                console.log("branches", response.data.data);
+                setBranches(response.data.data);
+            } catch (error) {
+                console.error("Error fetching branches:", error.response?.data || error.message);
+            } finally {
                 setLoading(false);
-            })
-            .catch((error) => {
-                console.error("Error fetching users:", error);
-                setLoading(false);
-            });
-    }, []);
+            }
+        };
+
+        fetchBranches();
+    }, [token]);
+
+
 
     // crud 
 
-    const handleEdit = (user) => {
-        alert(`Edit user: ${user.name}`);
+    const handleEdit = (branch) => {
+        alert(`Edit branch: ${branch.name}`);
     };
 
-    const handleDelete = (user) => {
-        alert(`Delete user: ${user.name}`);
+    const handleDelete = (branch) => {
+        alert(`Delete branch: ${branch.name}`);
     };
 
-    const handleView = (user) => {
-        alert(`View details of user: ${user.name}`);
+    const handleView = (branch) => {
+        alert(`View details of branch: ${branch.name}`);
     };
 
 
@@ -63,7 +82,7 @@ const AllBranches = () => {
         <>
 
             {/* branches menu */}
-          
+
 
             <BranchesMenu title="View Branches" />
 
@@ -74,46 +93,46 @@ const AllBranches = () => {
                             <tr>
                                 <th className="py-3 px-5 border-b text-start">#</th>
                                 <th className="py-3 px-5 border-b text-start">Name</th>
-                                <th className="py-3 px-5 border-b text-start">Email</th>
-                                <th className="py-3 px-5 border-b text-start">Phone</th>
+                                <th className="py-3 px-5 border-b text-start">Address</th>
+                                <th className="py-3 px-5 border-b text-start">Created On</th>
                                 <th className="py-3 px-5 border-b text-center">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {users.map((user, index) => (
+                            {branches.map((branch, index) => (
                                 <tr
-                                    key={user.id}
+                                    key={branch._id}
                                     className={`${index % 2 === 0 ? "bg-white" : "bg-gray-50"
                                         } hover:bg-gray-100 transition-colors duration-150`}
                                 >
                                     <td className="py-3 px-5 border-b font-medium text-gray-800">
-                                        {user.id}
+                                        {index + 1}
                                     </td>
                                     <td className="py-3 px-5 border-b font-medium text-gray-800">
-                                        {user.name}
+                                        {branch.branch_name}
                                     </td>
-                                    <td className="py-3 px-5 border-b text-gray-800">{user.email}</td>
-                                    <td className="py-3 px-5 border-b text-gray-800">{user.phone}</td>
+                                    <td className="py-3 px-5 border-b text-gray-800">{branch.branch_address}</td>
+                                    <td className="py-3 px-5 border-b text-gray-800">{branch.createdAt}</td>
 
                                     {/* actions  */}
                                     <td className="py-3 px-5 border-b text-center">
                                         <div className="flex justify-center gap-3">
                                             <button
-                                                onClick={() => handleView(user)}
+                                                onClick={() => navigate(`/admin/branches/${branch._id}`)}
                                                 className="p-2 rounded-full hover:bg-blue-100 transition"
                                                 title="View"
                                             >
                                                 <FaEye className="text-blue-500 text-lg" />
                                             </button>
                                             <button
-                                                onClick={() => handleEdit(user)}
+                                                onClick={() => navigate(`/admin/branches/edit/${branch._id}`)}
                                                 className="p-2 rounded-full hover:bg-yellow-100 transition"
                                                 title="Edit"
                                             >
                                                 <FaEdit className="text-yellow-500 text-lg" />
                                             </button>
                                             <button
-                                                onClick={() => handleDelete(user)}
+                                                onClick={() => handleDelete(branch)}
                                                 className="p-2 rounded-full hover:bg-red-100 transition"
                                                 title="Delete"
                                             >

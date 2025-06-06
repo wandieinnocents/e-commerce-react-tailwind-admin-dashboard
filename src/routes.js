@@ -11,6 +11,10 @@ import AllBranches from "views/admin/Branches/AllBranches";
 import AddBranch from "views/admin/Branches/AddBranch";
 import ActiveBranches from "views/admin/Branches/ActiveBranches";
 import InActiveBranches from "views/admin/Branches/InActiveBranches";
+import EditBranch from "views/admin/Branches/EditBranch";
+import ViewBranchDetails from "views/admin/Branches/ViewBranchDetails";
+
+
 
 
 //brands
@@ -74,6 +78,23 @@ const routes = [
     hidden: true
   },
 
+  {
+    name: "Edit Branch",
+    layout: "/admin",
+    path: "branches/edit/:id",
+    icon: <MdOutlineShoppingCart className="h-6 w-6" />,
+    component: <EditBranch />,
+    hidden: true
+  },
+
+  {
+    name: "Branch Detsils",
+    layout: "/admin",
+    path: "branches/:id",
+    icon: <MdOutlineShoppingCart className="h-6 w-6" />,
+    component: <ViewBranchDetails />,
+    hidden: true
+  },
   {
     name: "Active Branch",
     layout: "/admin",
