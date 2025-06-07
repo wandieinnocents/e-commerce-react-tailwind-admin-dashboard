@@ -9,6 +9,7 @@ import { useAuth } from '../../../context/AuthContext';
 import { useParams } from "react-router-dom";
 import { FaSpinner } from 'react-icons/fa';
 import { formatDate } from 'utils/DateFormarter';
+import BASE_URL from 'config/base_url';
 
 
 const ViewBranchDetails = () => {
@@ -33,7 +34,7 @@ const ViewBranchDetails = () => {
             }
 
             try {
-                const response = await axios.get(`http://localhost:4001/api/branches/${id}`, {
+                const response = await axios.get(`${BASE_URL}/branches/${id}`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                         Accept: "application/json",

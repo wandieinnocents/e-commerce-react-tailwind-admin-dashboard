@@ -4,6 +4,7 @@ import axios from "axios";
 import { toast } from 'react-toastify';
 import { useAuth } from '../../../context/AuthContext';
 import BranchesMenu from './BranchesMenu';
+import BASE_URL from 'config/base_url';
 
 const EditBranch = () => {
     const { id } = useParams();
@@ -58,7 +59,7 @@ const EditBranch = () => {
         const payload = { branch_name, branch_status, branch_address };
 
         try {
-            const response = await axios.put(`http://localhost:4001/api/branches/${id}`, payload, {
+            const response = await axios.put(`${BASE_URL}/branches/${id}`, payload, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     "Content-Type": "application/json",

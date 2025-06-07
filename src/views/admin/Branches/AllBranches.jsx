@@ -10,25 +10,23 @@ import Swal from 'sweetalert2';
 
 //context api
 import { useAuth } from 'context/AuthContext';
+import BASE_URL from 'config/base_url';
 
 const AllBranches = () => {
-
     const navigate = useNavigate();
     const { user, logout, token, isAuthenticated } = useAuth();
-    console.log(token);
     const [branches, setBranches] = useState([]);
     const [loading, setLoading] = useState(true);
 
+    //get all branches 
     useEffect(() => {
         const fetchBranches = async () => {
             try {
                 if (!token) {
                     return;
-                    logout();
-                    console.log("cannot fetch branches because token is null");
                 }
 
-                const response = await axios.get("http://localhost:4001/api/branches", {
+                const response = await axios.get(`${BASE_URL}/branches`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                         Accept: "application/json",
@@ -49,7 +47,6 @@ const AllBranches = () => {
 
     // Delete branch function
     const handleDelete = async (id) => {
-
         //check token 
         if (!token) {
             console.log("No token, cannot fetch branch");
@@ -71,7 +68,7 @@ const AllBranches = () => {
         if (!result.isConfirmed) return;
 
         try {
-            await axios.delete(`http://localhost:4001/api/branches/${id}`, {
+            await axios.delete(`${BASE_URL}/branches/${id}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     Accept: "application/json",
@@ -89,23 +86,7 @@ const AllBranches = () => {
     };
 
 
-
-
-    // crud 
-
-    const handleEdit = (branch) => {
-        alert(`Edit branch: ${branch.name}`);
-    };
-
-
-
-    const handleView = (branch) => {
-        alert(`View details of branch: ${branch.name}`);
-    };
-
-
     // if loading data
-
     if (loading) {
         return (
             <div className="flex justify-center items-center h-64">
@@ -122,7 +103,6 @@ const AllBranches = () => {
         <>
 
             {/* branches menu */}
-
 
             <BranchesMenu title="View Branches" />
 

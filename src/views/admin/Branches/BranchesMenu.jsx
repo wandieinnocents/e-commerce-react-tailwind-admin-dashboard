@@ -17,7 +17,7 @@ const BranchesMenu = ({title}) => {
                         </Link>
 
                         <Link to="/admin/branches" className="bg-green-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
-                            View Branches
+                            All Branches
                         </Link>
 
                         <Link to="/admin/branches/active" className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
