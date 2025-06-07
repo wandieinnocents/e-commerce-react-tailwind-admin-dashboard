@@ -7,3 +7,4 @@ Ecommerce platform developed in tailwind, react js
 - ReactJs
 - Tailwind Css
 - Toasts : https://www.npmjs.com/package/react-toastify
+- JWT Decode

@@ -4,6 +4,8 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import { toast } from 'react-toastify';
+import { jwtDecode } from 'jwt-decode';
+
 
 const AuthContext = createContext();
 export const useAuth = () => useContext(AuthContext);
@@ -27,6 +29,7 @@ export const AuthProvider = ({ children }) => {
     });
 
     const [loading, setLoading] = useState(true);
+
 
     useEffect(() => {
         if (token) {
@@ -57,6 +60,7 @@ export const AuthProvider = ({ children }) => {
                 autoClose: 3000,
                 hideProgressBar: false,
                 closeOnClick: true,
+
                 pauseOnHover: true,
                 draggable: true,
             });
@@ -64,6 +68,23 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
+
+    //logout functionality
+    // Check if token is expired
+    const isTokenExpired = (token) => {
+        try {
+            const decoded = jwtDecode(token);
+            const currentTime = Date.now() / 1000;
+            //if decoded.exp time is less //means token has not yet expired
+            return decoded.exp < currentTime;
+        } catch (error) {
+            //if decoded.exp time is greater than current time
+            return true; // treat invalid token as expired
+        }
+    };
+
+
+    //logout function 
     const logout = () => {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
@@ -73,6 +94,19 @@ export const AuthProvider = ({ children }) => {
         toast.success("Logged out successful!");
         navigate("/auth/sign-in");
     };
+
+    //Auto logout if token is expired
+    useEffect(() => {
+        if (token) {
+            if (isTokenExpired(token)) {
+                logout();
+            } else {
+                axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+            }
+        }
+        setLoading(false);
+    }, [token]);
+
 
     return (
         <AuthContext.Provider value={{ user, token, login, logout, isAuthenticated: !!user }}>

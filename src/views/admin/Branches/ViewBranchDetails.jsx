@@ -23,6 +23,7 @@ const ViewBranchDetails = () => {
     const [branch, setBranch] = useState(null);
     const [loading, setLoading] = useState(true);
 
+    //get branch details
     useEffect(() => {
         const fetchBranch = async () => {
             if (!token) {
@@ -49,6 +50,9 @@ const ViewBranchDetails = () => {
 
         fetchBranch();
     }, [token, id]);
+
+
+
 
 
     if (loading) {

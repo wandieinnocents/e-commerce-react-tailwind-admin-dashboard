@@ -5,7 +5,8 @@ import { FaEye, FaEdit, FaTrash } from 'react-icons/fa';
 import { FaSpinner } from 'react-icons/fa';
 import { useNavigate } from "react-router-dom";
 import { formatDate } from 'utils/DateFormarter';
-
+import { toast } from 'react-toastify';
+import Swal from 'sweetalert2';
 
 //context api
 import { useAuth } from 'context/AuthContext';
@@ -13,12 +14,10 @@ import { useAuth } from 'context/AuthContext';
 const AllBranches = () => {
 
     const navigate = useNavigate();
-
     const { user, logout, token, isAuthenticated } = useAuth();
-
+    console.log(token);
     const [branches, setBranches] = useState([]);
     const [loading, setLoading] = useState(true);
-
 
     useEffect(() => {
         const fetchBranches = async () => {
@@ -48,6 +47,48 @@ const AllBranches = () => {
         fetchBranches();
     }, [token]);
 
+    // Delete branch function
+    const handleDelete = async (id) => {
+
+        //check token 
+        if (!token) {
+            console.log("No token, cannot fetch branch");
+            logout();
+            return;
+        }
+
+        //confirm alert
+        const result = await Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, delete it!',
+        });
+
+        if (!result.isConfirmed) return;
+
+        try {
+            await axios.delete(`http://localhost:4001/api/branches/${id}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    Accept: "application/json",
+                },
+            });
+
+            // Remove deleted branch from state to update UI 
+            setBranches(prevBranches => prevBranches.filter(branch => branch._id !== id));
+            toast.success("Branch deleted successfully.")
+
+        } catch (error) {
+            console.error("Error deleting branch:", error.response?.data || error.message);
+            toast.success("Failed to delete branch.")
+        }
+    };
+
+
 
 
     // crud 
@@ -56,9 +97,7 @@ const AllBranches = () => {
         alert(`Edit branch: ${branch.name}`);
     };
 
-    const handleDelete = (branch) => {
-        alert(`Delete branch: ${branch.name}`);
-    };
+
 
     const handleView = (branch) => {
         alert(`View details of branch: ${branch.name}`);
@@ -94,6 +133,7 @@ const AllBranches = () => {
                             <tr>
                                 <th className="py-3 px-5 border-b text-start">#</th>
                                 <th className="py-3 px-5 border-b text-start">Name</th>
+                                <th className="py-3 px-5 border-b text-start">Status</th>
                                 <th className="py-3 px-5 border-b text-start">Address</th>
                                 <th className="py-3 px-5 border-b text-start">Created On</th>
                                 <th className="py-3 px-5 border-b text-center">Actions</th>
@@ -112,8 +152,21 @@ const AllBranches = () => {
                                     <td className="py-3 px-5 border-b font-medium text-gray-800">
                                         {branch.branch_name}
                                     </td>
+                                    <td className="py-3 px-5 border-b text-gray-800">
+                                        {
+                                            branch.branch_status == "1" ? (
+                                                <span className="inline-block bg-green-100 text-green-800 text-sm font-medium px-3 py-1 rounded-full">
+                                                    Active
+                                                </span>
+                                            ) : (
+                                                <span className="inline-block bg-red-400 text-white text-sm font-medium px-3 py-1 rounded-full">
+                                                    Inactive
+                                                </span>
+                                            )
+                                        }
+                                    </td>
                                     <td className="py-3 px-5 border-b text-gray-800">{branch.branch_address}</td>
-                                    <td className="py-3 px-5 border-b text-gray-800">{formatDate(branch.createdAt , true)}</td>
+                                    <td className="py-3 px-5 border-b text-gray-800">{formatDate(branch.createdAt, true)}</td>
 
                                     {/* actions  */}
                                     <td className="py-3 px-5 border-b text-center">
@@ -133,7 +186,8 @@ const AllBranches = () => {
                                                 <FaEdit className="text-yellow-500 text-lg" />
                                             </button>
                                             <button
-                                                onClick={() => handleDelete(branch)}
+                                                // onClick={deleteBranch}
+                                                onClick={() => handleDelete(branch._id)}
                                                 className="p-2 rounded-full hover:bg-red-100 transition"
                                                 title="Delete"
                                             >

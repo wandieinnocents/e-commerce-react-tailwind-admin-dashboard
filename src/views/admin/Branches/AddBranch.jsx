@@ -11,24 +11,52 @@ const AddBranch = () => {
 
     const navigate = useNavigate();
 
-    const { login, isAuthenticated } = useAuth();
-    const [branch_name, setBranchName] = useState('');
-    const [branch_address, setBranchAddress] = useState('');
-    const [branch_status, setBranchStatus] = useState('');
-    const [error, setError] = useState('');
+    const { login, token, isAuthenticated } = useAuth();
+    const [branch_name, setBranchName] = useState("");
+    const [branch_status, setBranchStatus] = useState(1);
+    const [branch_address, setBranchAddress] = useState("");
+    const [error, setError] = useState("");
 
+    // submit form data
     const handleSubmit = async (e) => {
-        // e.preventDefault();
-        // setError('');
-        // try {
-        //     await login(email, password);
-        //     //redirect to dashboard
-        //     navigate("/admin/default");
+        e.preventDefault();
+        if (!token) {
+            return;
+            console.log("Token not found or invalid")
+        }
 
-        // } catch (err) {
-        //     setError(err.message);
-        // }
+        const payload = {
+            branch_name,
+            branch_status,
+            branch_address,
+        };
+
+        try {
+            const response = await axios.post("http://localhost:4001/api/branches", payload, {
+                headers: {
+                    Authorization: `Bearer ${token}`, // if using token
+                    "Content-Type": "application/json",
+                },
+            });
+
+            console.log("Branch created:", response.data);
+            // clear form
+            setBranchName("");
+            setBranchStatus("");
+            setBranchAddress("");
+
+            // redirect
+            toast.success(response.data.message)
+            navigate("/admin/branches");
+
+        } catch (error) {
+            const errorMessage = error.response?.data?.message || error.response?.data?.error || "Error creating branch.";
+            console.error("Error creating branch:", error.response?.data.error);
+            setError(toast.error(errorMessage));
+
+        }
     };
+
 
 
     return (
@@ -59,12 +87,12 @@ const AddBranch = () => {
                             <select
                                 id="branch_status"
                                 value={branch_status}
-                                onChange={(e) => setBranchStatus(e.target.value)}
+                                onChange={(e) => setBranchStatus(Number(e.target.value))}
                                 className="mb-3 border rounded px-3 py-2 w-full"
                             >
-                                <option value="null">Select</option>
-                                <option value="1">Active</option>
-                                <option value="2">Inactive</option>
+                                <option value="">Select</option>
+                                <option value={1} >Active</option>
+                                <option value={0}>Inactive</option>
                             </select>
 
 
@@ -77,7 +105,7 @@ const AddBranch = () => {
                                 placeholder="Enter branch address"
                                 value={branch_address}
                                 // onChange={handleChange}
-                                onChange={(e) => setBranchName(e.target.value)}
+                                onChange={(e) => setBranchAddress(e.target.value)}
                                 className="mb-3 border rounded px-3 py-2 w-full"
                             />
 
