@@ -17,6 +17,12 @@ const AllBranches = () => {
     const { user, logout, token, isAuthenticated } = useAuth();
     const [branches, setBranches] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [page, setPage] = useState(1);
+    const [limit, setLimit] = useState(4);
+    const [totalPages, setTotalPages] = useState(1);
+    const [searchTerm, setSearchTerm] = useState("");
+
+
 
     //get all branches 
     useEffect(() => {
@@ -26,15 +32,15 @@ const AllBranches = () => {
                     return;
                 }
 
-                const response = await axios.get(`${BASE_URL}/branches`, {
+                const response = await axios.get(`${BASE_URL}/branches?page=${page}&limit=${limit}`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                         Accept: "application/json",
                     },
                 });
 
-                console.log("branches", response.data.data);
                 setBranches(response.data.data);
+                setTotalPages(Math.ceil(response.data.records_count / limit));
             } catch (error) {
                 console.error("Error fetching branches:", error.response?.data || error.message);
             } finally {
@@ -43,7 +49,7 @@ const AllBranches = () => {
         };
 
         fetchBranches();
-    }, [token]);
+    }, [token, page]);
 
     // Delete branch function
     const handleDelete = async (id) => {
@@ -85,6 +91,12 @@ const AllBranches = () => {
         }
     };
 
+    //search branches
+    const filteredBranches = branches.filter(branch =>
+        branch.branch_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        branch.branch_address?.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
 
     // if loading data
     if (loading) {
@@ -108,6 +120,19 @@ const AllBranches = () => {
 
             <div className="overflow-x-auto py-4">
                 <div className="overflow-x-auto py-4">
+
+                    {/* search */}
+                    <div className="mb-4">
+                        <input
+                            type="text"
+                            placeholder="Search branches..."
+                            className="px-4 py-2 border border-gray-300 rounded-md w-full md:w-1/3"
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                        />
+                    </div>
+
+
                     <table className="min-w-full bg-white border border-gray-200 shadow-md rounded-xl overflow-hidden">
                         <thead className="bg-navy-950 text-gray-300 uppercase text-sm tracking-wider">
                             <tr>
@@ -120,7 +145,7 @@ const AllBranches = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {branches.map((branch, index) => (
+                            {filteredBranches.map((branch, index) => (
                                 <tr
                                     key={branch._id}
                                     className={`${index % 2 === 0 ? "bg-white" : "bg-gray-50"
@@ -179,6 +204,30 @@ const AllBranches = () => {
                             ))}
                         </tbody>
                     </table>
+
+                    {/* pagination */}
+                    <div className="flex justify-between items-center mt-4 px-4">
+                        <button
+                            onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+                            disabled={page === 1}
+                            className="px-4 py-2 bg-gray-200 text-gray-700 rounded disabled:opacity-50"
+                        >
+                            Previous
+                        </button>
+
+                        <span className="text-sm text-gray-700">
+                            Page <strong>{page}</strong> of <strong>{totalPages}</strong>
+                        </span>
+
+                        <button
+                            onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
+                            disabled={page === totalPages}
+                            className="px-4 py-2 bg-gray-200 text-gray-700 rounded disabled:opacity-50"
+                        >
+                            Next
+                        </button>
+                    </div>
+
                 </div>
 
             </div>
