@@ -17,10 +17,12 @@ const AllBranches = () => {
     const { user, logout, token, isAuthenticated } = useAuth();
     const [branches, setBranches] = useState([]);
     const [loading, setLoading] = useState(true);
+
+    //pagination 
     const [page, setPage] = useState(1);
-    const [limit, setLimit] = useState(4);
+    const [limit, setLimit] = useState(100);
     const [totalPages, setTotalPages] = useState(1);
-    const [searchTerm, setSearchTerm] = useState("");
+    // const [searchTerm, setSearchTerm] = useState("");
 
 
 
@@ -40,6 +42,7 @@ const AllBranches = () => {
                 });
 
                 setBranches(response.data.data);
+                //pagination pages
                 setTotalPages(Math.ceil(response.data.records_count / limit));
             } catch (error) {
                 console.error("Error fetching branches:", error.response?.data || error.message);
@@ -92,10 +95,10 @@ const AllBranches = () => {
     };
 
     //search branches
-    const filteredBranches = branches.filter(branch =>
-        branch.branch_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        branch.branch_address?.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    // const filteredBranches = branches.filter(branch =>
+    //     branch.branch_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    //     branch.branch_address?.toLowerCase().includes(searchTerm.toLowerCase())
+    // );
 
 
     // if loading data
@@ -122,7 +125,7 @@ const AllBranches = () => {
                 <div className="overflow-x-auto py-4">
 
                     {/* search */}
-                    <div className="mb-4">
+                    {/* <div className="mb-4">
                         <input
                             type="text"
                             placeholder="Search branches..."
@@ -130,7 +133,7 @@ const AllBranches = () => {
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                         />
-                    </div>
+                    </div> */}
 
 
                     <table className="min-w-full bg-white border border-gray-200 shadow-md rounded-xl overflow-hidden">
@@ -145,7 +148,7 @@ const AllBranches = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {filteredBranches.map((branch, index) => (
+                            {branches.map((branch, index) => (
                                 <tr
                                     key={branch._id}
                                     className={`${index % 2 === 0 ? "bg-white" : "bg-gray-50"
@@ -227,6 +230,8 @@ const AllBranches = () => {
                             Next
                         </button>
                     </div>
+
+                    {/* end pagination  */}
 
                 </div>
 

@@ -19,7 +19,12 @@ const ActiveBranches = () => {
     const [branches, setBranches] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    //get all branches 
+    //pagination 
+    const [page, setPage] = useState(1);
+    const [limit, setLimit] = useState(100);
+    const [totalPages, setTotalPages] = useState(1);
+
+    //get active branches 
     useEffect(() => {
         const fetchBranches = async () => {
             try {
@@ -27,15 +32,16 @@ const ActiveBranches = () => {
                     return;
                 }
 
-                const response = await axios.get(`${BASE_URL}/branches/active`, {
+                const response = await axios.get(`${BASE_URL}/branches/active?page=${page}&limit=${limit}`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                         Accept: "application/json",
                     },
                 });
 
-                console.log("branches", response.data.data);
                 setBranches(response.data.data);
+                //pagination pages
+                setTotalPages(Math.ceil(response.data.records_count / limit));
             } catch (error) {
                 console.error("Error fetching branches:", error.response?.data || error.message);
             } finally {
@@ -127,6 +133,32 @@ const ActiveBranches = () => {
                             ))}
                         </tbody>
                     </table>
+
+                    {/* pagination */}
+                    <div className="flex justify-between items-center mt-4 px-4">
+                        <button
+                            onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+                            disabled={page === 1}
+                            className="px-4 py-2 bg-gray-200 text-gray-700 rounded disabled:opacity-50"
+                        >
+                            Previous
+                        </button>
+
+                        <span className="text-sm text-gray-700">
+                            Page <strong>{page}</strong> of <strong>{totalPages}</strong>
+                        </span>
+
+                        <button
+                            onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
+                            disabled={page === totalPages}
+                            className="px-4 py-2 bg-gray-200 text-gray-700 rounded disabled:opacity-50"
+                        >
+                            Next
+                        </button>
+                    </div>
+
+                    {/* end pagination  */}
+
                 </div>
 
             </div>
